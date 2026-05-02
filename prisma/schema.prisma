@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "postgresql"
+
+}
+
+enum UserRole {
+  JUNIOR
+  SENIOR
+  ADMIN
+}
+
+enum DoubtStatus {
+  OPEN
+  SOLVED
+}
+
+model User {
+  id          String   @id @default(cuid())
+  clerkId     String   @unique
+  name        String
+  email       String   @unique
+  role        UserRole?
+  college     String?
+  department  String?
+  year        Int?
+  points      Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  doubts      Doubt[]  @relation("JuniorDoubts")
+  answers     Answer[] @relation("SeniorAnswers")
+  pointsLog   PointTransaction[]
+}
+
+model Doubt {
+  id          String      @id @default(cuid())
+  title       String
+  description String
+  subject     String
+  status      DoubtStatus @default(OPEN)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  juniorId    String
+  junior      User        @relation("JuniorDoubts", fields: [juniorId], references: [id])
+
+  answers     Answer[]
+}
+
+model Answer {
+  id          String   @id @default(cuid())
+  content     String
+  isAccepted  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  doubtId     String
+  doubt       Doubt    @relation(fields: [doubtId], references: [id], onDelete: Cascade)
+
+  seniorId    String
+  senior      User     @relation("SeniorAnswers", fields: [seniorId], references: [id])
+}
+
+model PointTransaction {
+  id          String   @id @default(cuid())
+  points      Int
+  reason      String
+  createdAt   DateTime @default(now())
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+}
