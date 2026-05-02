@@ -56,7 +56,7 @@ export default async function DoubtPage({ params }: { params: Promise<{ id: stri
         </h2>
 
         <div className="space-y-4 mb-6">
-          {doubt.answers.map((answer) => (
+          {doubt.answers.map((answer: any) => (
             <div
               key={answer.id}
               className={`p-5 rounded-xl ${
