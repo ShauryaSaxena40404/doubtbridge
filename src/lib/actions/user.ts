@@ -3,7 +3,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { prisma } from '@/lib/prisma'
 import { redirect } from 'next/navigation'
-import { UserRole } from '@prisma/client'
+
 
 export async function completeOnboarding(formData: FormData) {
   const { userId } = await auth()
@@ -12,7 +12,7 @@ export async function completeOnboarding(formData: FormData) {
   if (!userId || !user) throw new Error('Unauthorized')
 
   const name = formData.get('name') as string
-  const role = formData.get('role') as UserRole
+  const role = formData.get('role') as 'JUNIOR' | 'SENIOR' | 'ADMIN'
   const college = formData.get('college') as string
   const department = formData.get('department') as string
   const year = parseInt(formData.get('year') as string)
