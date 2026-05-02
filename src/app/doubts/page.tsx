@@ -21,7 +21,7 @@ export default async function DoubtsPage() {
           <p className="text-slate-400">No doubts yet. Be the first to ask!</p>
         ) : (
           <div className="space-y-3">
-            {doubts.map((doubt) => (
+            {doubts.map((doubt:any) => (
               <Link
                 key={doubt.id}
                 href={`/doubts/${doubt.id}`}
